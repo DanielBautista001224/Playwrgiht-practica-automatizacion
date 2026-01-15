@@ -3,14 +3,13 @@ import com.microsoft.playwright.*;
 public class PruebaPlaywright {
     public static void main(String[] args) {
         try (Playwright playwright = Playwright.create()) {
-            // false = VER el navegador. true = navegador invisible (más rápido)
+
             Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
             Page page = browser.newPage();
 
             page.navigate("https://demoqa.com/automation-practice-form");
             System.out.println("Titulo de la pagina: " + page.title());
 
-            // Pausa de 3 segundos para que alcances a ver que abrió
             page.waitForTimeout(3000);
 
             browser.close();
