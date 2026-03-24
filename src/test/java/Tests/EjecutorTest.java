@@ -1,7 +1,10 @@
 package Tests;
 import Base.BaseTest;
+import data.DataSource;
+import data.FakerDataSource;
 import org.junit.jupiter.api.Test;
 import pages.RegistrationPage;
+import utils.ConfigManager;
 import utils.DataGenerator;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,40 +12,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class EjecutorTest extends BaseTest {
+public class  EjecutorTest extends BaseTest {
     @Test
-    void registroUsuarioValidoCompleto() {
-        ejecutarRegistro(DataGenerator.generarUsuarioValido());
-    }
+    void registrosMasivosConFaker() {
 
-    @Test
-    void registroSinHobbies() {
-        DataGenerator.UsuarioData usuario = DataGenerator.generarUsuarioValido();
-        usuario.hobbies.clear();
-        ejecutarRegistro(usuario);
-    }
+        String modo = ConfigManager.get("modo");
 
-    @Test
-    void registroSinFechaDeNacimiento() {
-        DataGenerator.UsuarioData usuario = DataGenerator.generarUsuarioValido();
-        usuario.fechaNacimiento = "";
-        ejecutarRegistro(usuario);
-    }
+        DataSource fuente;
 
-    @Test
-    void registroConGeneroOther() {
-        DataGenerator.UsuarioData usuario = DataGenerator.generarUsuarioValido();
-        usuario.genero = "Other" ;
-        ejecutarRegistro(usuario);
-    }
+        if ("FAKER".equalsIgnoreCase(modo)) {
+            int cantidad = Integer.parseInt(ConfigManager.get("cantidadPruebas"));
+            fuente = new FakerDataSource(cantidad);
+        } else {
+            // después pondremos Google Sheets
+            throw new RuntimeException("Modo no soportado aún");
+        }
 
-    @Test
-    void registroFechaLimiteInferior() {
-        DataGenerator.UsuarioData usuario = DataGenerator.generarUsuarioValido();
-        usuario.fechaNacimiento = "01 January 1900"; // valor límite
-        ejecutarRegistro(usuario);
+        for (DataGenerator.UsuarioData usuario : fuente.obtenerDatos()) {
+            ejecutarRegistro(usuario);
+        }
     }
-
 
     private void ejecutarRegistro(DataGenerator.UsuarioData usuario) {
         RegistrationPage registroPage = new RegistrationPage(page);
