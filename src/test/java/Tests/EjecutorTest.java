@@ -2,6 +2,7 @@ package Tests;
 import Base.BaseTest;
 import data.DataSource;
 import data.FakerDataSource;
+import data.GoogleSheetsDataSource;
 import org.junit.jupiter.api.Test;
 import pages.RegistrationPage;
 import utils.ConfigManager;
@@ -13,25 +14,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class  EjecutorTest extends BaseTest {
+
     @Test
-    void registrosMasivosConFaker() {
-
-        String modo = ConfigManager.get("modo");
-
-        DataSource fuente;
-
-        if ("FAKER".equalsIgnoreCase(modo)) {
-            int cantidad = Integer.parseInt(ConfigManager.get("cantidadPruebas"));
-            fuente = new FakerDataSource(cantidad);
-        } else {
-            // después pondremos Google Sheets
-            throw new RuntimeException("Modo no soportado aún");
-        }
+    void registrosMasivos() {
+        DataSource fuente = obtenerFuenteDesdeConfig();
 
         for (DataGenerator.UsuarioData usuario : fuente.obtenerDatos()) {
             ejecutarRegistro(usuario);
         }
     }
+
 
     private void ejecutarRegistro(DataGenerator.UsuarioData usuario) {
         RegistrationPage registroPage = new RegistrationPage(page);
@@ -78,5 +70,20 @@ public class  EjecutorTest extends BaseTest {
             throw new RuntimeException("No se pudo crear el archivo temporal para la prueba.");
         }
 
+    }
+    private DataSource obtenerFuenteDesdeConfig() {
+
+        String modo = ConfigManager.get("modo");
+
+        if ("FAKER".equalsIgnoreCase(modo)) {
+            int cantidad = Integer.parseInt(ConfigManager.get("cantidadPruebas"));
+            return new FakerDataSource(cantidad);
+        }
+
+        if ("GOOGLE_SHEETS".equalsIgnoreCase(modo)) {
+            return new GoogleSheetsDataSource();
+        }
+
+        throw new RuntimeException("Modo no soportado");
     }
 }
