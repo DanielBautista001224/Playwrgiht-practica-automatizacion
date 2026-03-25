@@ -98,6 +98,9 @@ public class RegistrationPage {
     }
 
     public void seleccionarEstadoYCiudad(String estado, String ciudad) {
+        page.locator("div[role='dialog']").waitFor(
+                new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN)
+        );
         page.locator(listaDesplegableEstado).click();
         page.keyboard().type(estado);
         page.keyboard().press("Enter");

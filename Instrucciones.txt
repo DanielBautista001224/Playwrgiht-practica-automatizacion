@@ -1,0 +1,12 @@
+Este programa se puede poner a funcionarcon diversos archivos.
+
+se puede ir a la carpeta de ejecutable y ejecutar PlaywrightApp.exe
+
+se puede ingresar a la carpeta target y ejecutar el archivo Playwrgiht-1.0-SNAPSHOT-shaded.jar
+
+se puede ingresar a la carpeta src\main\java\runner y ejecutar MainRunner.java
+
+se puede ingresar a la carpeta src\test\java\Tests y ejecutar EjecutorTest.java
+
+los .java se ejecutan desde un editor de codigo, el link del insumo/base de datos que alimenta el programa es: 
+https://docs.google.com/spreadsheets/d/1XfvFGfbJWf8XJRNnS5Hf3-IjG0tw2YFi-Jjsz_VKcQo/edit?usp=sharing
